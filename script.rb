@@ -9,11 +9,6 @@ Dotenv.load
 require 'mechanize'
 mechanize = Mechanize.new
 
-# clear the output folders
-`rm ./plaintext/*`
-`rm ./pdf/*`
-
-
 Continue_From = ENV["Continue_From"] ||= 0
 
 class Biophoton_Downloader
