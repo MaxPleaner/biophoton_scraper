@@ -13,6 +13,9 @@ mechanize = Mechanize.new
 `rm ./plaintext/*`
 `rm ./pdf/*`
 
+
+Continue_From = ENV["Continue_From"] ||= 0
+
 class Biophoton_Downloader
   attr_reader :mechanize
   attr_accessor :idx
@@ -35,17 +38,19 @@ class Biophoton_Downloader
       page_url = url + page_idx.to_s
       page = mechanize.get page_url
       links = page.css("#Content").css(".Title").css("a").each do |link|
-        download_link link.attr 'href'
+        download_links link.attr 'href'
       end
     end
   end
-  def download_link(url)
-    page = mechanize.get url
-    html = page.at("#Content").to_s
-    title = page.title.parameterize
-    save_plaintext_version html, title
-    save_pdf_version html, title
-    self.idx += 1
+  def download_links(url)
+    unless idx < Continue_From
+      page = mechanize.get url
+      html = page.at("#Content").to_s
+      title = page.title.parameterize
+      save_plaintext_version html, title
+      save_pdf_version html, title
+      self.idx += 1
+    end
   end
   def save_plaintext_version(html, title)
     filename = "plaintext/#{idx.to_s.rjust(4, "0")}#{title}.txt"
