@@ -12,3 +12,8 @@ gem "pdfkit"
 
 gem "dotenv"
 
+gem 'pry'
+
+gem 'mechanize'
+
+gem 'dotenv'

@@ -1,4 +1,5 @@
 pdf/*
 plaintext/*
+html/*
 .env
 merged.pdf

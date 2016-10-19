@@ -9,7 +9,7 @@ Dotenv.load
 require 'mechanize'
 mechanize = Mechanize.new
 
-Continue_From = ENV["Continue_From"] ||= 0
+Continue_From = ENV["Continue_From"] || 0
 
 class Biophoton_Downloader
   attr_reader :mechanize
@@ -43,9 +43,15 @@ class Biophoton_Downloader
       html = page.at("#Content").to_s
       title = page.title.parameterize
       save_plaintext_version html, title
-      save_pdf_version html, title
+      save_html_version html, title
+      # save_pdf_version html, title
       self.idx += 1
     end
+  end
+  def save_html_version(html, title)
+    filename="html/#{idx.to_s.rjust(4, "0")}#{title}.html"
+    File.open(filename, 'w') { |f| f.write html }
+    puts "created html: ".yellow + title
   end
   def save_plaintext_version(html, title)
     filename = "plaintext/#{idx.to_s.rjust(4, "0")}#{title}.txt"
